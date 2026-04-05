@@ -1,0 +1,131 @@
+{
+  "fuzzpack_version": "1.0.0-MVP",
+  "total_vectors": 4,
+  "split_brains_detected": 1,
+  "details": [
+    {
+      "vector_file": "01_float16_atproto_exception.cbor",
+      "size_bytes": 6,
+      "consensus_achieved": false,
+      "results": {
+        "python": {
+          "status": "reject",
+          "version": "0.1.1",
+          "fingerprint": null,
+          "error_reason": "Failed to decode DAG-CBOR. Unsupported major type"
+        },
+        "go": {
+          "status": "reject",
+          "version": "v0.8.0",
+          "fingerprint": null,
+          "error_reason": "cbor: data item of cbor type primitives is not accepted by protocol: float smaller than 64 bits"
+        },
+        "rust": {
+          "status": "accept",
+          "version": "0.1.2",
+          "fingerprint": "[[str:a,float:0x3ff8000000000000]]",
+          "error_reason": null
+        },
+        "js": {
+          "status": "reject",
+          "version": "0.1.x",
+          "fingerprint": null,
+          "error_reason": "invalid simple value; got 25"
+        }
+      }
+    },
+    {
+      "vector_file": "02_trailing_garbage.cbor",
+      "size_bytes": 6,
+      "consensus_achieved": true,
+      "results": {
+        "js": {
+          "status": "reject",
+          "version": "0.1.x",
+          "fingerprint": null,
+          "error_reason": "decoded value contains remainder"
+        },
+        "go": {
+          "status": "reject",
+          "version": "v0.8.0",
+          "fingerprint": null,
+          "error_reason": "cbor: 2 bytes of extraneous data starting at index 4"
+        },
+        "python": {
+          "status": "reject",
+          "version": "0.1.1",
+          "fingerprint": null,
+          "error_reason": "Failed to decode DAG-CBOR. Invalid DAG-CBOR: contains multiple objects (CBOR sequence)"
+        },
+        "rust": {
+          "status": "reject",
+          "version": "0.1.2",
+          "fingerprint": null,
+          "error_reason": "trailing data at offset 5"
+        }
+      }
+    },
+    {
+      "vector_file": "03_non_string_key.cbor",
+      "size_bytes": 3,
+      "consensus_achieved": true,
+      "results": {
+        "rust": {
+          "status": "reject",
+          "version": "0.1.2",
+          "fingerprint": null,
+          "error_reason": "invalid type: integer `1`, expected a string"
+        },
+        "go": {
+          "status": "reject",
+          "version": "v0.8.0",
+          "fingerprint": null,
+          "error_reason": "cbor: invalid map key type: not string"
+        },
+        "js": {
+          "status": "reject",
+          "version": "0.1.x",
+          "fingerprint": null,
+          "error_reason": "expected map to only have string keys; got type 0"
+        },
+        "python": {
+          "status": "reject",
+          "version": "0.1.1",
+          "fingerprint": null,
+          "error_reason": "Failed to decode DAG-CBOR. Map keys must be strings"
+        }
+      }
+    },
+    {
+      "vector_file": "04_malformed_tag42.cbor",
+      "size_bytes": 3,
+      "consensus_achieved": true,
+      "results": {
+        "go": {
+          "status": "reject",
+          "version": "v0.8.0",
+          "fingerprint": null,
+          "error_reason": "invalid cid: unmarshal: got tag content type uint64, expect tag content []byte"
+        },
+        "rust": {
+          "status": "reject",
+          "version": "0.1.2",
+          "fingerprint": null,
+          "error_reason": "unexpected code at offset 3"
+        },
+        "js": {
+          "status": "reject",
+          "version": "0.1.x",
+          "fingerprint": null,
+          "error_reason": "expected cid-link to be type 2 (bytes); got type 0"
+        },
+        "python": {
+          "status": "reject",
+          "version": "0.1.1",
+          "fingerprint": null,
+          "error_reason": "Failed to decode DAG-CBOR. Mismatch { name: \"bytes\", found: 1 }"
+        }
+      }
+    }
+  ]
+}

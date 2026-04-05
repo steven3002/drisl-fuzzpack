@@ -1,0 +1,59 @@
+name: DRISL FuzzPack Regression Replay
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  split-brain-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Setup Rust (Coordinator & serde_ipld)
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.76.0
+
+      # Setup Go (go-dasl adapter)
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+      - name: Build Go Adapter
+        run: |
+          cd adapters/go-dasl
+          go build -o go-adapter main.go
+
+      # Setup Node.js (atcute adapter)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      - name: Install JS Dependencies
+        run: |
+          cd adapters/atcute
+          npm install
+
+      # Setup Python (libipld adapter)
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Setup Python Virtual Environment
+        run: |
+          cd adapters/python-libipld
+          python -m venv venv
+          ./venv/bin/pip install libipld
+
+      # Execute Regression Replay
+      # This runs the coordinator over the `findings` folder to prove
+      # that the split-brains still exist on the latest library versions.
+      - name: Run FuzzPack Replay
+        run: |
+          cd coordinator
+          cargo run -- replay ../corpus/findings
