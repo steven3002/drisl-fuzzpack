@@ -17,7 +17,7 @@ jobs:
       - name: Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: 1.76.0
+          toolchain: stable
 
       # Setup Go (go-dasl adapter)
       - name: Setup Go
@@ -49,6 +49,8 @@ jobs:
           cd adapters/python-libipld
           python -m venv venv
           ./venv/bin/pip install libipld
+
+
 
       # Execute Regression Replay
       # This runs the coordinator over the `findings` folder to prove
